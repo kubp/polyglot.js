@@ -6,8 +6,8 @@ var expect = require('chai').expect;
 describe('t', function () {
   var phrases = {
     hello: 'Hello',
-    hi_name_welcome_to_place: 'Hi, %{name}, welcome to %{place}!',
-    name_your_name_is_name: '%{name}, your name is %{name}!',
+    hi_name_welcome_to_place: 'Hi, __name__, welcome to __place__!',
+    name_your_name_is_name: '__name__, your name is __name__!',
     empty_string: ''
   };
 
@@ -34,7 +34,7 @@ describe('t', function () {
   it('interpolates with missing substitutions', function () {
     expect(polyglot.t('hi_name_welcome_to_place', {
       place: undefined
-    })).to.equal('Hi, %{name}, welcome to %{place}!');
+    })).to.equal('Hi, __name__, welcome to __place__!');
   });
 
   it('interpolates the same placeholder multiple times', function () {
@@ -45,20 +45,20 @@ describe('t', function () {
 
   it('allows you to supply default values', function () {
     expect(polyglot.t('can_i_call_you_name', {
-      _: 'Can I call you %{name}?',
+      _: 'Can I call you __name__?',
       name: 'Robert'
     })).to.equal('Can I call you Robert?');
   });
 
   it('returns the non-interpolated key if not initialized with allowMissing and translation not found', function () {
-    expect(polyglot.t('Welcome %{name}', {
+    expect(polyglot.t('Welcome __name__', {
       name: 'Robert'
-    })).to.equal('Welcome %{name}');
+    })).to.equal('Welcome __name__');
   });
 
   it('returns an interpolated key if initialized with allowMissing and translation not found', function () {
     var instance = new Polyglot({ phrases: phrases, allowMissing: true });
-    expect(instance.t('Welcome %{name}', {
+    expect(instance.t('Welcome __name__', {
       name: 'Robert'
     })).to.equal('Welcome Robert');
   });
@@ -82,7 +82,7 @@ describe('t', function () {
     var nestedPhrases = {
       nav: {
         presentations: 'Presentations',
-        hi_user: 'Hi, %{user}.',
+        hi_user: 'Hi, __user__.',
         cta: {
           join_now: 'Join now!'
         }
@@ -127,7 +127,7 @@ describe('t', function () {
 
 describe('pluralize', function () {
   var phrases = {
-    count_name: '%{smart_count} Name |||| %{smart_count} Names'
+    count_name: '__smartCount__ Name |||| __smartCount__ Names'
   };
 
   var polyglot;
@@ -136,10 +136,10 @@ describe('pluralize', function () {
   });
 
   it('supports pluralization with an integer', function () {
-    expect(polyglot.t('count_name', { smart_count: 0 })).to.equal('0 Names');
-    expect(polyglot.t('count_name', { smart_count: 1 })).to.equal('1 Name');
-    expect(polyglot.t('count_name', { smart_count: 2 })).to.equal('2 Names');
-    expect(polyglot.t('count_name', { smart_count: 3 })).to.equal('3 Names');
+    expect(polyglot.t('count_name', { smartCount: 0 })).to.equal('0 Names');
+    expect(polyglot.t('count_name', { smartCount: 1 })).to.equal('1 Name');
+    expect(polyglot.t('count_name', { smartCount: 2 })).to.equal('2 Names');
+    expect(polyglot.t('count_name', { smartCount: 3 })).to.equal('3 Names');
   });
 
   it('accepts a number as a shortcut to pluralize a word', function () {
@@ -158,14 +158,14 @@ describe('pluralize', function () {
 
 describe('locale-specific pluralization rules', function () {
   it('pluralizes in Arabic', function () {
-    // English would be: "1 vote" / "%{smart_count} votes"
+    // English would be: "1 vote" / "__smart_count} votes"
     var whatSomeoneTranslated = [
       'ولا صوت',
       'صوت واحد',
       'صوتان',
-      '%{smart_count} أصوات',
-      '%{smart_count} صوت',
-      '%{smart_count} صوت'
+      '__smartCount__ أصوات',
+      '__smartCount__ صوت',
+      '__smartCount__ صوت'
     ];
     var phrases = {
       n_votes: whatSomeoneTranslated.join(' |||| ')
@@ -308,15 +308,15 @@ describe('unset', function () {
 });
 
 describe('transformPhrase', function () {
-  var simple = '%{name} is %{attribute}';
-  var english = '%{smart_count} Name |||| %{smart_count} Names';
+  var simple = '__name__ is __attribute__';
+  var english = '__smartCount__ Name |||| __smartCount__ Names';
   var arabic = [
     'ولا صوت',
     'صوت واحد',
     'صوتان',
-    '%{smart_count} أصوات',
-    '%{smart_count} صوت',
-    '%{smart_count} صوت'
+    '__smartCount__ أصوات',
+    '__smartCount__ صوت',
+    '__smartCount__ صوت'
   ].join(' |||| ');
 
   it('does simple interpolation', function () {
@@ -324,22 +324,22 @@ describe('transformPhrase', function () {
   });
 
   it('removes missing keys', function () {
-    expect(Polyglot.transformPhrase(simple, { name: 'Polyglot' })).to.equal('Polyglot is %{attribute}');
+    expect(Polyglot.transformPhrase(simple, { name: 'Polyglot' })).to.equal('Polyglot is __attribute__');
   });
 
-  it('selects the correct plural form based on smart_count', function () {
-    expect(Polyglot.transformPhrase(english, { smart_count: 0 }, 'en')).to.equal('0 Names');
-    expect(Polyglot.transformPhrase(english, { smart_count: 1 }, 'en')).to.equal('1 Name');
-    expect(Polyglot.transformPhrase(english, { smart_count: 2 }, 'en')).to.equal('2 Names');
-    expect(Polyglot.transformPhrase(english, { smart_count: 3 }, 'en')).to.equal('3 Names');
+  it('selects the correct plural form based on smartCount', function () {
+    expect(Polyglot.transformPhrase(english, { smartCount: 0 }, 'en')).to.equal('0 Names');
+    expect(Polyglot.transformPhrase(english, { smartCount: 1 }, 'en')).to.equal('1 Name');
+    expect(Polyglot.transformPhrase(english, { smartCount: 2 }, 'en')).to.equal('2 Names');
+    expect(Polyglot.transformPhrase(english, { smartCount: 3 }, 'en')).to.equal('3 Names');
   });
 
   it('selects the correct locale', function () {
     // French rule: "0" is singular
-    expect(Polyglot.transformPhrase(english, { smart_count: 0 }, 'fr')).to.equal('0 Name');
-    expect(Polyglot.transformPhrase(english, { smart_count: 1 }, 'fr')).to.equal('1 Name');
-    expect(Polyglot.transformPhrase(english, { smart_count: 2 }, 'fr')).to.equal('2 Names');
-    expect(Polyglot.transformPhrase(english, { smart_count: 3 }, 'fr')).to.equal('3 Names');
+    expect(Polyglot.transformPhrase(english, { smartCount: 0 }, 'fr')).to.equal('0 Name');
+    expect(Polyglot.transformPhrase(english, { smartCount: 1 }, 'fr')).to.equal('1 Name');
+    expect(Polyglot.transformPhrase(english, { smartCount: 2 }, 'fr')).to.equal('2 Names');
+    expect(Polyglot.transformPhrase(english, { smartCount: 3 }, 'fr')).to.equal('3 Names');
 
     // Arabic has 6 rules
     expect(Polyglot.transformPhrase(arabic, 0, 'ar')).to.equal('ولا صوت');
@@ -352,19 +352,19 @@ describe('transformPhrase', function () {
 
   it('defaults to `en`', function () {
     // French rule: "0" is singular
-    expect(Polyglot.transformPhrase(english, { smart_count: 0 })).to.equal('0 Names');
+    expect(Polyglot.transformPhrase(english, { smartCount: 0 })).to.equal('0 Names');
   });
 
   it('ignores a region subtag when choosing a pluralization rule', function () {
     // French rule: "0" is singular
-    expect(Polyglot.transformPhrase(english, { smart_count: 0 }, 'fr-FR')).to.equal('0 Name');
+    expect(Polyglot.transformPhrase(english, { smartCount: 0 }, 'fr-FR')).to.equal('0 Name');
   });
 
   it('works without arguments', function () {
     expect(Polyglot.transformPhrase(english)).to.equal(english);
   });
 
-  it('respects a number as shortcut for smart_count', function () {
+  it('respects a number as shortcut for smartCount', function () {
     expect(Polyglot.transformPhrase(english, 0, 'en')).to.equal('0 Names');
     expect(Polyglot.transformPhrase(english, 1, 'en')).to.equal('1 Name');
     expect(Polyglot.transformPhrase(english, 5, 'en')).to.equal('5 Names');

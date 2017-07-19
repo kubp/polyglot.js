@@ -94,7 +94,7 @@ function pluralTypeIndex(locale, count) {
 
 var dollarRegex = /\$/g;
 var dollarBillsYall = '$$';
-var tokenRegex = /%\{(.*?)\}/g;
+var tokenRegex = /__(.*?)__/g;
 
 // ### transformPhrase(phrase, substitutions, locale)
 //
@@ -131,14 +131,14 @@ function transformPhrase(phrase, substitutions, locale) {
   var result = phrase;
 
   // allow number as a pluralization shortcut
-  var options = typeof substitutions === 'number' ? { smart_count: substitutions } : substitutions;
+  var options = typeof substitutions === 'number' ? { smartCount: substitutions } : substitutions;
 
   // Select plural form: based on a phrase text that contains `n`
   // plural forms separated by `delimeter`, a `locale`, and a `substitutions.smart_count`,
   // choose the correct plural form. This is only done if `count` is set.
-  if (options.smart_count != null && result) {
+  if (options.smartCount != null && result) {
     var texts = split.call(result, delimeter);
-    result = trim(texts[pluralTypeIndex(locale || 'en', options.smart_count)] || texts[0]);
+    result = trim(texts[pluralTypeIndex(locale || 'en', options.smartCount)] || texts[0]);
   }
 
   // Interpolate: Creates a `RegExp` object for each interpolation placeholder.
