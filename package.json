@@ -1,6 +1,6 @@
 {
   "name": "kiwi-polyglot",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "Give your JavaScript the ability to speak many languages.",
   "main": "index.js",
   "scripts": {
@@ -13,7 +13,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com:kubp/polyglot.js.git"
+    "url": "git+https://github.com/kubp/polyglot.js.git"
   },
   "keywords": [
     "i18n",

@@ -66,7 +66,7 @@ var pluralTypeToLanguages = {
   german: ['fa', 'da', 'de', 'en', 'es', 'fi', 'el', 'he', 'hu', 'it', 'nl', 'no', 'pt', 'sv'],
   french: ['fr', 'tl', 'pt-br'],
   russian: ['hr', 'ru', 'lt'],
-  czech: ['cs', 'sk'],
+  czech: ['cs', 'cz', 'sk'],
   polish: ['pl'],
   icelandic: ['is']
 };
